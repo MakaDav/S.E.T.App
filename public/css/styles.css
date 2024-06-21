@@ -1,0 +1,130 @@
+#initial-page{
+    display:flex;
+    width:60%;
+    margin:auto;
+    gap:5px;
+}
+#student-info{
+    flex:1
+}
+#login-box{
+    flex:1
+}
+.courses-list-header{
+    padding:3px;
+    font-weight:bold;
+    text-transform: uppercase;
+    background-color: lightgrey;
+    display:flex;
+    border-top: 2px solid grey;
+    border-bottom: 2px solid grey;
+}
+.courses-list-item{
+    display:flex;
+    font-size:16px;
+    margin:2px;
+    padding:3px;
+    border-bottom: 1px solid grey;
+
+}
+.course-label-lecturer-list{
+    padding:3px;
+    background-color:lightgreen;
+}
+.course-code{
+    flex:1;
+    text-align:center;
+}
+.course-title{
+    flex:2
+}
+.lecturers-assigned{
+    flex:1;
+    text-align:center;
+}
+.lecturers-assessed{
+    flex:1;
+    text-align:center;
+}
+.action{
+    flex:1;
+    text-align:center;
+    border:none
+}
+
+#lecturers-list-container{
+    width:80%;
+    margin:auto;
+    list-style: none;
+}
+.lecturer-list-name{
+    flex:2
+}
+.lecturer-list-action{
+    flex:1
+}
+
+.lecturers-list-container-header{
+    display:flex;
+    padding:3px;
+    margin:2px;
+    border-bottom:2px solid grey;
+    border-top:2px solid grey;
+    background-color:lightgrey;
+    text-transform:uppercase;
+    font-weight: bold;
+    text-align:center
+}
+
+.lecturers-list-item{
+    display:flex;
+    text-align:center;
+    padding:3px;
+    margin:2px;
+    border-bottom:1px solid grey
+}
+.lecturer-list-item-name{
+    flex:2
+}
+.lecturer-list-item-action{
+    flex:1;
+    border:none;
+}
+#questionnaire{
+    text-align:center;
+    width:80%;
+    margin:auto;
+}
+#questionnaire-navigation-buttons{
+    display:flex;
+justify-content: space-around;  
+gap:5px;  
+}
+.questionnaire-nav-button{
+    flex:1;
+    margin:10px;
+}
+#answer-options{
+    width:40%;
+    margin:auto;
+}
+#logo-set-panel{
+    display:flex;
+    gap:5px;
+    align-items: center;
+    background-color: green;
+    color:white;
+    font-weight:bold;
+    border-top-left-radius: 0.5cap;
+}
+.unza-logo{
+    width:50px;
+}
+.header-info{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:3px;
+    border:1px solid grey;
+}
+
