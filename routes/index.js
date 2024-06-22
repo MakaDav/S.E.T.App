@@ -3,6 +3,7 @@ const apiRouter = express()
 const { dbConnection } = require('../database/db')
 const data = require('../database/data')
 const bodyParser = require('body-parser')
+const isFirstSemesterCourse = require('../public/js/other-courses')
 apiRouter.use(bodyParser.json())
 
 apiRouter.post('/all/courses', (req, res)=>{
@@ -12,6 +13,31 @@ apiRouter.post('/all/courses', (req, res)=>{
         let student = students.find(c => c.comp_no === username)
         console.log(req.body,username,'student',student)
         res.json(student)
+    }catch(error){
+        console.error('Error fetching lecturers:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+apiRouter.post('/all/courses/sis', async (req, res)=>{
+    const { username, password } = req.body
+    try{
+        let response = await fetch('http://set.unza.zm:8088/https://sis.unza.zm/Rest/authenticate.json',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({username, password})
+        })
+        let jsonData = (await response.json()).response.data
+        let userData = {
+            comp_no:jsonData.user.computer_no,
+            first_name:jsonData.misk.Student.first_name,
+            last_name:jsonData.misk.Student.first_name,
+            courses:jsonData.courses.map(c=>c.c).filter(c => isFirstSemesterCourse(c.code))
+        }
+        console.log(req.body,username,'student',userData)
+        res.json(userData)
     }catch(error){
         console.error('Error fetching lecturers:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -37,6 +63,25 @@ apiRouter.post('/all/course/lecturers', (req, res)=>{
     }catch(error){
         console.error('Error fetching lecturers:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+apiRouter.post('/all/course/lecturers/sis', async (req, res)=>{
+    const { course_id } = req.body
+    try{
+        let response = await fetch('http://set.unza.zm:8088/https://sis.unza.zm/Rest/getlecturerset.json',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({course_id})
+        })
+        let jsonData = (await response.json()).response.data
+        let filteredLecturers = jsonData.filter(l => l.man_no !== null)
+        console.log(filteredLecturers)
+        res.json(filteredLecturers)
+    }catch(error){
+        console.log("Error fetching lecturers",error)
     }
 })
 

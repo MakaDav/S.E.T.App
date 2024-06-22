@@ -1,7 +1,7 @@
 async function getStudentCourses(username,password){
     
         try {
-            const response = await fetch('api/all/courses', {
+            const response = await fetch('api/all/courses/sis', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

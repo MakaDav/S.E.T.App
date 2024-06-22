@@ -74,6 +74,7 @@ async function initialiseStudent(student_id){
 }
 
 async function displayCourses(){
+    console.log('state',state)
     let coursesContainer = document.createElement('ul')
     coursesContainer.style.listStyle = 'none'
     coursesContainer.id = 'courses-container'
@@ -87,7 +88,7 @@ async function displayCourses(){
         let courseListItem = document.createElement('li')
         courseListItem.innerHTML = '<div class="courses-list-item">'+
                                  '<span class="course-code header">'+course.code+'</span>'+
-                                 '<span class="course-title header">'+course.title+'</span>'+
+                                 '<span class="course-title header">'+course.name+'</span>'+
                                  '<span class="lectData lecturers-assigned header" lectData="'+course.code+'">loading..</span>'+
                                  (state.config === 'completed'? '<span class="assessedData lecturers-assessed header" assessedData="'+course.code+'" >0</span>':'')+
                                  '<button class="action header" id="'+course.id+'">'+(state.config === 'completed'? 'Assess': 'Select')+'</span></div>'
@@ -165,7 +166,7 @@ async function displayCourses(){
 }
 
 function displayLecturers(courseId,courseCode){
-    console.log(courseId)
+    console.log('Course id',courseId)
     getCourseLecturers(courseId).then(
         lecturers => {
             console.log(lecturers,state)
@@ -265,14 +266,14 @@ function displayLecturers(courseId,courseCode){
 }
 
 function displayAssignedLecturers(courseId,courseCode,studentId){
-    console.log
+    console.log('Course id',courseId)
     getCourseLecturers(courseId).then(
         allLecturers =>{
             getCourseLecturersAssigned(courseCode,studentId).then(
                 lecturers => {
                     console.log(lecturers,state)
                     let course = state.student.courses.find(c => c.code === courseCode)
-                    let courseLabel = '<div class="course-label-lecturer-list">'+course.code+': '+course.title+'</div>'
+                    let courseLabel = '<div class="course-label-lecturer-list">'+course.code+': '+course.name+'</div>'
                     let lecturersListContainer = document.createElement('ul')
                     lecturersListContainer.id = 'lecturers-list-container'
                     lecturersListContainer.innerHTML = courseLabel +'<div class="lecturers-list-container-header">'+
