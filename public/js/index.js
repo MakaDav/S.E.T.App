@@ -359,6 +359,8 @@ function displayAssignedLecturers(courseId,courseCode,studentId){
                         //course.code+': '+course.title
                         showUIItem('questionnaire')
                         displayHeader()
+                        document.getElementById('assessment-details-lecturer').innerHTML = lecturer.first_name +' '+lecturer.last_name
+                        document.getElementById('assessment-details-course').innerHTML = course.code +': '+course.name
                         state.questionnaire.course_code = course.code
                         state.questionnaire.man_no = lecturer.man_no
                         document.getElementById('question-panel').innerHTML=state.questionnaire.questions[0].text
@@ -389,6 +391,7 @@ function displayAssignedLecturers(courseId,courseCode,studentId){
                                     let value = e.target.id
                                     state.questionnaire.answers[key]=value
                                     console.log(state.questionnaire.answers)
+                                    document.getElementById('next').disabled = false
                                 }
                             )
                             
@@ -446,6 +449,8 @@ function showUIItem(id){
     hideAll()
     document.getElementById(id).removeAttribute('hidden')
 }
+
+document.getElementById("questionnaire-submit-button").disabled=true
 
 document.getElementById("questionnaire-submit-button").addEventListener('click',
     function(e){
@@ -513,6 +518,9 @@ document.getElementById('next').addEventListener('click',
                 console.log(el)
             }
             document.getElementById('question-panel').innerHTML=state.questionnaire.questions[currentQuestionNo].text
+            e.target.disabled = true
+        }else{
+            document.getElementById('questionnaire-submit-button').disabled = false
         }
     }
 )
