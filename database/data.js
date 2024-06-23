@@ -4,10 +4,10 @@ let students = [
         first_name:'David', 
         last_name:'Zulu', 
         courses:[
-            {id:'1001', code:'CSC 2901',title:'Discrete Structures'},
-            {id:'1002', code:'CSC 2000',title:'Computer Programming'},
-            {id:'1003', code:'CSC 2011',title:'Computer Architecture'},
-            {id:'1004', code:'CSC 2021',title:'Databases Fundamentals'},
+            {id:'1001', code:'CSC 2901',name:'Discrete Structures'},
+            {id:'1002', code:'CSC 2000',name:'Computer Programming'},
+            {id:'1003', code:'CSC 2011',name:'Computer Architecture'},
+            {id:'1004', code:'CSC 2021',name:'Databases Fundamentals'},
         ]
     },
     {
@@ -15,10 +15,10 @@ let students = [
         first_name:'Michael', 
         last_name:'Mvula', 
         courses:[
-            {id:'2001', code:'CSC 3011',title:'Algorithms amd Complexity'},
-            {id:'2002', code:'CSC 3600',title:'Software Engineering'},
-            {id:'2003', code:'CSC 3141',title:'Object-Oriented Analysis and Design'},
-            {id:'2004', code:'CSC 3142',title:'Artificial Intelligence'},
+            {id:'2001', code:'CSC 3011',name:'Algorithms amd Complexity'},
+            {id:'2002', code:'CSC 3600',name:'Software Engineering'},
+            {id:'2003', code:'CSC 3141',name:'Object-Oriented Analysis and Design'},
+            {id:'2004', code:'CSC 3142',name:'Artificial Intelligence'},
         ]
     },
     {
@@ -26,10 +26,10 @@ let students = [
         first_name:'Given', 
         last_name:'Vincent', 
         courses:[
-            {id:'1001', code:'CSC 2901',title:'Discrete Structures'},
-            {id:'1002', code:'CSC 2000',title:'Computer Programming'},
-            {id:'1003', code:'CSC 2011',title:'Computer Architecture'},
-            {id:'1004', code:'CSC 2021',title:'Databases Fundamentals'},
+            {id:'1001', code:'CSC 2901',name:'Discrete Structures'},
+            {id:'1002', code:'CSC 2000',name:'Computer Programming'},
+            {id:'1003', code:'CSC 2011',name:'Computer Architecture'},
+            {id:'1004', code:'CSC 2021',name:'Databases Fundamentals'},
         ]
     },
 ]

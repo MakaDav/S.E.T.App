@@ -8,21 +8,43 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>SET</title>
 </head>
-<body>
+<body class="container">
     <div id="initial-page" class="set-ui">
-        <div id="student-info">
-            Welcome to SET
+        <div id="student-info" hidden>
+            <div class="logo-container">
+                <img class='home-unza-logo' src="images/unza_logo.png" alt="" srcset="">
+            </div>
+            <div class="set-home-instructions">
+                Student Evaluation of Teaching
+            </div>
+            <div class="get-involed">Get involved in three simple steps</div>
+            <ul class="get-involeved">
+                
+                <li class="three-steps">Confirm list of course lecturers</li>
+                <li class="three-steps">Select lecturer to assess</li>
+                <li class="three-steps">Complete questionnaire</li>
+                <li class="three-steps">Submit Questionnaire</li>
+            </ul>
         </div>
         <div id="login-box">
-            
-            <div class="set-login-label">S.E.T Login</div>
-            <div >
-                <input id="username" type="text" placeholder="Enter Username" required>
+            <div class="login-box-contents">
+                <div class="logo-container">
+                    <img class='home-unza-logo' src="images/unza_logo.png" alt="" srcset="">
+                </div>
+                <div class="set-home-instructions">
+                    Student Evaluation of Teaching
+                </div>
+                <div class="set-login-form">Enter your Login details
+                    <div class="error-login" hidden="hidden">Wrong username or password</div>
+                    <div >
+                        <input class="form-control mb-2 set-login-field"id="username" type="text" placeholder="Enter Username" required>
+                    </div>
+                    <div >
+                        <input class="form-control mb-1  set-login-field" id="password" id ="password" type="password" placeholder="Enter password" required>
+                    </div>
+                    <input class="btn btn-primary form-control" id="login-button" type="button" value="Login">
+                </div>
             </div>
-            <div >
-                <input id="password" id ="password" type="password" placeholder="Enter password" required>
-            </div>
-            <input id="login-button" type="button" value="Login">
         </div>
     </div>
     <div id="header"  hidden='hidden' class="set-ui">
@@ -39,36 +61,44 @@
     <div id="lecturers-list" hidden='hidden' class="set-ui">Lecturers List</div>
     <div id="questionnaire"  hidden='hidden' class="set-ui">
         <div id="questionnare-header"></div>
-        <div id="qustionnaire-instructions">
-            <div class="questionnaire-instructions-label">INSTRUCTIONS</div>
-            There are 18 assessment items to be completed in this questionnaire.<br>
-            Each assessment has a question and 5 possible options for you to choose from. <br>
-            Read carefully and understand clearly, each assessment item, before selecting your option <br>
-            You can not move to the next item before answering the current one <br> 
-            Once all items have been answered, you can submit your responses <br>
-            You may start your assessment.
-        </div>
-        <div id="assessment-details">
-            <div id="assessment-details-header">
-                ASSESSMENT DETAILS
-            </div>
-            <div id="assessment-details-lecturer">
-
-            </div>
-            <div id="assessment-details-course">
-
+        <div id="questionnaire-instructions">
+            <div>
+                <div class="questionnaire-instructions-label">INSTRUCTIONS</div>
+                <div>
+                There are 18 assessment items to be completed in this questionnaire.<br>
+                Each assessment has a question and 5 possible options for you to choose from. <br>
+                Read carefully and understand clearly, each assessment item, before selecting your option <br>
+                You can not move to the next item before answering the current one <br> 
+                Once all items have been answered, you can submit your responses <br>
+                You may start your assessment.
+                </div>
+                
+                <input id='begin-assessment' type="button" value="START ASSESSMENT">
             </div>
         </div>
-        <div class="question-panel">Select One Option
-            <div id="question-panel"></div>
-            <div id="answer-options"></div>
-        </div>
-        <div id="questionnaire-navigation-buttons">
-            <input class="questionnaire-nav-button" type="button" id="previous" value="'Previous">
-            <input class="questionnaire-nav-button" type="button" id="next" value="Next" >
-        </div>
-        <div id="questionnaire-submit-button-panel">
-            <input id="questionnaire-submit-button" type="button" value="Submit"></div>
+        <div id="questionnaire-body" hidden="'hidden">
+            <div id="assessment-details">
+                <div id="assessment-details-header">
+                    ASSESSMENT DETAILS
+                </div>
+                <div id="assessment-details-lecturer">
+    
+                </div>
+                <div id="assessment-details-course">
+    
+                </div>
+            </div>
+            <div class="question-panel">Select One Option
+                <div id="question-panel"></div>
+                <div id="answer-options"></div>
+            </div>
+            <div id="questionnaire-navigation-buttons">
+                <input class="questionnaire-nav-button" type="button" id="previous" value="Previous">
+                <input class="questionnaire-nav-button" type="button" id="next" value="Next" >
+            </div>
+            <div id="questionnaire-submit-button-panel">
+                <input id="questionnaire-submit-button" type="button" value="Submit"></div>
+            </div>
         </div>
     </div>
     <script type="module" src="js/index.js" class="set-ui"></script>

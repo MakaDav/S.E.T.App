@@ -1,7 +1,8 @@
 import { getConfigStatus, setConfigStatus } from "./config/config.js"
 import { getStudentCourses, getAssignedCourses } from "./courses/student.js"
 import { getCourseLecturers, getCourseLecturersAssigned, getCourseLecturersAssessedCount}  from "./lecturers/lecturers.js"
-import { completeAssessmentItem } from './assessments/assessments.js'
+import { completeAssessmentItem, completeAssessments, getAssessmentItemStatus, getCompletedAssessments, getTotalAssessments } from './assessments/assessments.js'
+import questions from "./questionnaire/questionnaire.js"
 
 let state = {
     login:0,
@@ -10,13 +11,7 @@ let state = {
     entriesToSave:[],
     entriesToDelete:[],
     questionnaire:{
-        questions:[
-            { text: 'Punctuality of the lecturer in starting and ending lectures/tutorials' },
-            { text: 'Attendance at scheduled lectures' },
-            { text: 'laboratory sessions and tutorials' },
-            { text: 'Explanation of course objectives at beginning of course' },
-            { text: 'Explanation of course structure and expected learning' }
-        ],
+        questions:questions,
         man_no:'',
         answers:{},
         activeQuestion:0,
@@ -122,13 +117,46 @@ async function displayCourses(){
             )
             coursesContainer.append(startAssessmentButton)
             let coursesList = document.getElementById('courses-list')
+
             if(coursesList.hasChildNodes){
-                coursesList.replaceChild(coursesContainer, coursesList.firstChild)
-            }else{
-                coursesList.appendChild(coursesContainer)
+                coursesList.innerHTML = ''
             }
+
+            let banner = document.createElement('div')
+            banner.className = 'courses-list-banner'
+            let innerHtml = '<div class="set-banner-message">'
+            if(state.config==='completed'){
+                innerHtml += 'Assessment Stats: Total <span id="all-assessments-stats">'+state.student.courses.length+'</span> <span id="pending-assessments-stats">0</span>'
+            }else{
+                innerHtml += 'Instructions'
+            }
+            innerHtml += '</div>'
+            banner.innerHTML = innerHtml 
+            coursesList.append(banner,coursesContainer)
             showUIItem('courses-list')
             displayHeader()
+            getCompletedAssessments(state.student.comp_no).then(
+                completedAssessments=>{
+                    getTotalAssessments(state.student.comp_no).then(
+                        totalAssessments =>{
+                            let allAssessments = totalAssessments.count
+                            document.getElementById('all-assessments-stats').innerHTML=allAssessments
+                            let pendingAssessments = allAssessments - completedAssessments.count
+                            console.log('Completed assessments',completedAssessments,'Total assessments',totalAssessments)
+                            if(pendingAssessments===0){
+                                completeAssessments(state.student.comp_no).then(
+                                    results => {
+                                        document.getElementById('pending-assessments-stats').innerHTML = ':    Thank you! You have completed all assessments'
+                                    }
+                                )
+                            }else{
+                                document.getElementById('pending-assessments-stats').innerHTML = 'Pending: '+pendingAssessments
+                            }
+                        }
+                    )
+                }
+            )
+            
             let lectAssignedData = document.getElementsByClassName('lectData')
             for(const data of lectAssignedData){
                 console.log(data.getAttribute('lectData'))
@@ -171,7 +199,7 @@ function displayLecturers(courseId,courseCode){
         lecturers => {
             console.log(lecturers,state)
             let course = state.student.courses.find(c => c.code === courseCode)
-            let courseLabel = '<div class="course-label-lecturer-list">'+course.code+': '+course.title+'</div>'
+            let courseLabel = '<div class="course-label-lecturer-list">'+course.code+': '+course.name+'</div>'
             let lecturersListContainer = document.createElement('ul')
             lecturersListContainer.id = 'lecturers-list-container'
             lecturersListContainer.innerHTML = courseLabel+'<div class="lecturers-list-container-header">'+
@@ -311,10 +339,18 @@ function displayAssignedLecturers(courseId,courseCode,studentId){
                     showUIItem('lecturers-list')
                     displayHeader()
                     for(let l of lecturers){
+                        console.log('Lecturer',l.man_no)
                         let el = document.getElementById(l.man_no)
+                        let lecturer = allLecturers.find(lect => lect.man_no === l.man_no)
                         if(el){
-                            let lecturer = allLecturers.find(lect => lect.man_no === l.man_no)
-                            el.addEventListener('click',()=>assessLecturer(course,lecturer))
+                            getAssessmentItemStatus(course.code,state.student.comp_no,lecturer.man_no).then(status=>{
+                                console.log("Display status",status)
+                                el.addEventListener('click',()=>assessLecturer(course,lecturer))
+                                if(status.status === 'completed'){
+                                    el.disabled = true
+                                    el.value="Done"
+                                }
+                            }) 
                         }
                     }
         
@@ -431,7 +467,8 @@ document.getElementById("questionnaire-submit-button").addEventListener('click',
                 displayHeader()
             }
         )
-        
+        document.getElementById('questionnaire-instructions').removeAttribute('hidden')
+        document.getElementById('questionnaire-body').setAttribute('hidden','hidden')
     }
 )
 
@@ -479,6 +516,14 @@ document.getElementById('next').addEventListener('click',
         }
     }
 )
+
+document.getElementById('begin-assessment').addEventListener('click',
+    function(e){
+        document.getElementById('questionnaire-body').removeAttribute('hidden')
+        document.getElementById('questionnaire-instructions').setAttribute('hidden','hidden')
+    }
+)
+
 function deselectAllOptions() {
     const radioButtons = document.getElementsByName('options');
     radioButtons.forEach(radio => {

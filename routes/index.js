@@ -144,6 +144,46 @@ apiRouter.get('/config/status/:student_id', (req, res)=>{
     }
 })
 
+apiRouter.post('/assessments/status', (req, res)=>{
+    const { student_id } = req.body
+    const selectQuery = 'SELECT assessments FROM status WHERE student_id = ?'
+    try{
+        dbConnection.query(selectQuery,[ student_id ], (err, results)=>{
+            res.json(results[0])
+        })
+    }catch(error){
+
+    }
+})
+
+apiRouter.post('/complete/assessments', (req, res)=>{
+    const { student_id } = req.body
+    const updateQuery = 'UPDATE status SET assessments = "completed" WHERE student_id = ?' 
+    try{
+        dbConnection.query(updateQuery,[ student_id ], (err, results)=>{
+            res.json({message:'Assessment status updated'})
+        })
+    }catch(error){
+        console.log('Error updating assessment')
+        res.json({message:'Assessment status failed to update'})
+    }
+})
+apiRouter.post('/all/assessments', (req, res)=>{
+    const { student_id } = req.body
+    const countQuery = 'SELECT COUNT(STUDENT_ID) as count FROM assessments WHERE student_id = ?' 
+    try{
+        dbConnection.query(countQuery,[ student_id ], (err, results)=>{
+            res.json(results[0])
+        })
+    }catch(error){
+        console.log('Error updating assessment')
+        res.json({message:'Failed to count'})
+    }
+})
+
+
+
+
 apiRouter.post('/initialise/student', (req, res)=>{
     let { student_id } = req.body
     let configQuery = "INSERT INTO status (student_id) VALUES (?)"
@@ -221,5 +261,61 @@ apiRouter.post('/complete/assessment/item', (req, res)=>{
         console.log('error completing assessment item',{course_code, student_id, man_no, answers })
     }
 })
+
+apiRouter.post('/assessment/item/status', (req, res)=>{
+    const {course_code, student_id, man_no } = req.body
+    console.log(req.body)
+    const updateQuery = 'SELECT status FROM assessments WHERE course_code = ? AND student_id = ? AND man_no = ?'
+    try{
+        dbConnection.query(updateQuery, [course_code, student_id, man_no], (err, results)=>{
+            console.log('Success',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log('error getting assessment item',{course_code, student_id, man_no })
+        //res.json(error)
+    }
+})
+
+apiRouter.post('/completed/assessments',(req, res)=>{
+    const { student_id } = req.body
+    console.log('Received',student_id)
+    const selectQuery = "SELECT COUNT(student_id) as count FROM assessments WHERE student_id = ? AND status = 'completed'"
+    try{
+        dbConnection.query(selectQuery, [ student_id ],(err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
+apiRouter.post('/total/assessments',(req, res)=>{
+    const { student_id } = req.body
+    console.log('Received',student_id)
+    const selectQuery = "SELECT COUNT(student_id) as count FROM assessments WHERE student_id = ?"
+    try{
+        dbConnection.query(selectQuery, [ student_id ],(err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
 
 module.exports = apiRouter
