@@ -3,7 +3,7 @@ const connectionDetails = {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'set_revisited'
+        database: 'sis_api'
 }
 
 function getDBConnection(connectionDetails) {
