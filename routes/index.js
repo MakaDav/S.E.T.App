@@ -39,7 +39,7 @@ apiRouter.post('/all/courses/sis', async (req, res)=>{
         console.log(req.body,username,'student',userData)
         res.json(userData)
     }catch(error){
-        console.error('Error fetching lecturers:', error);
+        console.error('Error fetching courses:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 })

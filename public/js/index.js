@@ -33,9 +33,17 @@ async function authenticateStudent(){
     let username = document.getElementById('username').value 
     let password =  document.getElementById('password').value
     console.log({username, password})
-    let student = await getStudentCourses (username,password)
+    let student = ''
+    try{
+        student = await getStudentCourses (username,password)
+    }catch(error){
+        document.getElementById('error-login').style.color = 'red'
+        document.getElementById('error-login').removeAttribute('hidden')
+        return
+    }
     
-    if(student){
+    console.log('Received error',student)
+    if(student.comp_no !==null){
         state.student = student
         getConfigStatus(username).then(res=>{
             if(res.config === 'initialise'){
