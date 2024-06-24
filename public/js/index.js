@@ -101,7 +101,7 @@ async function displayCourses(){
             startAssessmentButton.id = 'start-assessments'
             startAssessmentButton.type  = 'button'
             startAssessmentButton.disabled = !state.eligibleForAssessments
-            startAssessmentButton.className = 'form-control'
+            startAssessmentButton.className = 'btn btn-primary form-control'
             startAssessmentButton.value = 'Start Assessments'
             startAssessmentButton.addEventListener('click',
                 function(e){

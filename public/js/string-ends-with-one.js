@@ -10,4 +10,4 @@ function isLastCharacterOne(courseCode) {
     return false;
 }
 
-export default isLastCharacterOne
+module.exports = isLastCharacterOne

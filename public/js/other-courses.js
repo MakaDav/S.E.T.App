@@ -1,3 +1,6 @@
+const isLastCharacterOne = require("./string-ends-with-one.js")
+const isExcludedCourse = require("./excluded-courses.js")
+
 let otherCourses = [
     'CSC 4835',
     'CSC 4035',
@@ -21,7 +24,6 @@ let otherCourses = [
     'CHE 2415',
     'CSC 4835',
     'CHE 2105',
-    'CSC 4505',
     'CHE 2415',
     'CSC 4845',
     'GES 4165',
@@ -88,12 +90,11 @@ let otherCourses = [
     'SDS 9215'
     ]
 
-
-
 function isFirstSemesterCourse(courseCode){
+    let excludedCourse = isExcludedCourse(courseCode)
     let c = otherCourses.find(c => {
         console.log('Received course code',courseCode, c, c===courseCode)
-        return c===courseCode
+        return (c===courseCode || isLastCharacterOne(courseCode)) && !excludedCourse
     })
     return c ? true : false
 }
