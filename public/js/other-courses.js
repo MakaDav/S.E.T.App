@@ -3,6 +3,15 @@ const isExcludedCourse = require("./excluded-courses.js")
 
 let otherCourses = [
     'CSC 4835',
+    'DME 2119',
+    'EDU 3003',
+    'LPR 3964',
+    'CSC 3009',
+    'LIS 3003',
+    'CSC 4004',
+    'ENG 2129',
+    'AGG 3004',
+    'AGG 2004',
     'CSC 4035',
     'CSC 4845',
     'LPR 4155',

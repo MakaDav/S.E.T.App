@@ -101,7 +101,7 @@ async function displayCourses(){
     getAssignedCourses(state.student.comp_no).then(
         assignedCourses => {
             console.log('assigned courses ',assignedCourses[0].count, 'all courses ',state.student.courses.length)
-            state.eligibleForAssessments = assignedCourses[0].count === state.student.courses.length
+            state.eligibleForAssessments = (assignedCourses[0].count === state.student.courses.length)&&(assignedCourses[0].count>0)
             let startAssessmentButton = document.createElement('input')
             if(state.config === 'completed'){
                 startAssessmentButton.style.display='none'
@@ -219,7 +219,7 @@ function displayLecturers(courseId,courseCode){
                 console.log('To post',lecturer.man_no, courseId,courseCode,state.student.comp_no)
                 let lecturersListItem = document.createElement('li')
                 lecturersListItem.innerHTML = '<div class="lecturers-list-item">'+
-                                               '<span class="lecturer-list-item-name">'+(lecturer.first_name+' '+lecturer.last_name)+'</span>'+
+                                               '<span class="lecturer-list-item-name">'+(lecturer.first_name+' '+lecturer.surname)+'</span>'+
                                                (state.config === 'completed'? "<input class='lecturer-list-item-action' type='button' id='"+lecturer.man_no+"' value='Assess'>":"<input class='lecturer-list-item-action' type='checkbox' id='"+lecturer.man_no+"'>")
                 lecturersListContainer.appendChild(lecturersListItem)
             }
@@ -322,7 +322,7 @@ function displayAssignedLecturers(courseId,courseCode,studentId){
                         console.log('To post',lecturer.man_no, courseId,courseCode,state.student.comp_no)
                         let lecturersListItem = document.createElement('li')
                         lecturersListItem.innerHTML = '<div class="lecturers-list-item">'+
-                                                       '<span class="lecturer-list-item-name">'+(lecturer.first_name+' '+lecturer.last_name)+'</span>'+
+                                                       '<span class="lecturer-list-item-name">'+(lecturer.first_name+' '+lecturer.surname)+'</span>'+
                                                        (state.config === 'completed'? "<input class='lecturer-list-item-action' type='button' id='"+lecturer.man_no+"' value='Assess'>":"<input class='lecturer-list-item-action' type='checkbox' id='"+lecturer.man_no+"'>")
                         lecturersListContainer.appendChild(lecturersListItem)
                     }
@@ -367,7 +367,7 @@ function displayAssignedLecturers(courseId,courseCode,studentId){
                         //course.code+': '+course.title
                         showUIItem('questionnaire')
                         displayHeader()
-                        document.getElementById('assessment-details-lecturer').innerHTML = lecturer.first_name +' '+lecturer.last_name
+                        document.getElementById('assessment-details-lecturer').innerHTML = lecturer.first_name +' '+lecturer.surname
                         document.getElementById('assessment-details-course').innerHTML = course.code +': '+course.name
                         state.questionnaire.course_code = course.code
                         state.questionnaire.man_no = lecturer.man_no
@@ -480,6 +480,7 @@ document.getElementById("questionnaire-submit-button").addEventListener('click',
                 displayHeader()
             }
         )
+        document.getElementById('questionnaire-submit-button').disabled = true
         document.getElementById('questionnaire-instructions').removeAttribute('hidden')
         document.getElementById('questionnaire-body').setAttribute('hidden','hidden')
     }

@@ -30,11 +30,12 @@ apiRouter.post('/all/courses/sis', async (req, res)=>{
             body:JSON.stringify({username, password})
         })
         let jsonData = (await response.json()).response.data
+        console.log(jsonData.misk.Student)
         let userData = {
             comp_no:jsonData.user.computer_no,
             first_name:jsonData.misk.Student.first_name,
-            last_name:jsonData.misk.Student.first_name,
-            courses:jsonData.courses.map(c=>c.c).filter(c => isFirstSemesterCourse(c.code))
+            last_name:jsonData.misk.Student.surname,
+            courses:jsonData.courses.map(c=>c.c).filter(c => !isFirstSemesterCourse(c.code))
         }
         console.log(req.body,username,'student',userData)
         res.json(userData)
@@ -88,7 +89,7 @@ apiRouter.post('/all/course/lecturers/sis', async (req, res)=>{
 apiRouter.post('/all/course/lecturers/assigned', (req, res)=>{
     let { course_code, student_id } = req.body
     console.log({ course_code, student_id })
-    let configQuery = "SELECT man_no FROM assessments WHERE course_code = ? AND student_id = ?"
+    let configQuery = "SELECT DISTINCT(man_no) FROM assessments WHERE course_code = ? AND student_id = ?"
     try{
         dbConnection.query(configQuery,[course_code,student_id], (err, results)=>{
             res.json(results)
@@ -102,7 +103,7 @@ apiRouter.post('/all/course/lecturers/assigned', (req, res)=>{
 apiRouter.post('/all/course/lecturers/assessed/count', (req, res)=>{
     let { course_code, student_id } = req.body
     console.log({ course_code, student_id })
-    let configQuery = "SELECT COUNT(man_no) AS count FROM assessments WHERE course_code = ? AND student_id = ? AND status ='completed'"
+    let configQuery = "SELECT COUNT(DISTINCT man_no) AS count FROM assessments WHERE course_code = ? AND student_id = ? AND status ='completed'"
     try{
         dbConnection.query(configQuery,[course_code,student_id], (err, results)=>{
             console.log(results, err)
@@ -127,6 +128,8 @@ apiRouter.post('/config/status', (req, res)=>{
     }
 })
 
+
+
 apiRouter.get('/config/status/:student_id', (req, res)=>{
     let { student_id } = req.params
     let configQuery = "SELECT config FROM status WHERE student_id = ?"
@@ -146,6 +149,18 @@ apiRouter.get('/config/status/:student_id', (req, res)=>{
 
 apiRouter.post('/assessments/status', (req, res)=>{
     const { student_id } = req.body
+    const selectQuery = 'SELECT assessments FROM status WHERE student_id = ?'
+    try{
+        dbConnection.query(selectQuery,[ student_id ], (err, results)=>{
+            res.json(results[0])
+        })
+    }catch(error){
+
+    }
+})
+
+apiRouter.get('/assessments/status/:student_id', (req, res)=>{
+    const { student_id } = req.params
     const selectQuery = 'SELECT assessments FROM status WHERE student_id = ?'
     try{
         dbConnection.query(selectQuery,[ student_id ], (err, results)=>{
