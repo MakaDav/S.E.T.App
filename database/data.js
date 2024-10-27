@@ -61,7 +61,21 @@ let lecturers = [
             },
             
         ]
+const users = [
+    {
+        username:'set-manager@unza.zm',
+        password:"set-unza24",
+        name:'Jonathan Tambatamba',
+        role:'manager',
+    },
+    {
+        username:'set-admin@unza.zm',
+        password:"set-unza24",
+        name:'David Zulu',
+        role:'admin',
+    },
+]
 
 module.exports ={
-    students, lecturers
+    students, lecturers, users
 }

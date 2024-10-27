@@ -1,6 +1,6 @@
 async function getCourseLecturers(course_id){
     try{
-        let lecturers = await fetch('/api/all/course/lecturers/sis',{
+        let lecturers = await fetch('http://set.unza.zm/api/all/course/lecturers/sis',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

@@ -67,6 +67,23 @@ apiRouter.post('/all/course/lecturers', (req, res)=>{
     }
 })
 
+apiRouter.get('/all/lecturers/sis', async (req, res)=>{
+    try{
+        let response = await fetch('http://set.unza.zm:8088/https://sis.unza.zm/Rest/getlecturerslistset.json',{
+            method:'GET',
+            headers:{
+                'Content-Type':'application/json'
+            },
+        })
+        let jsonData = (await response.json()).response.data
+        let filteredLecturers = jsonData.filter(l => l.man_no !== null)
+        console.log(filteredLecturers)
+        res.json(filteredLecturers)
+    }catch(error){
+        console.log("Error fetching lecturers",error)
+    }
+})
+
 apiRouter.post('/all/course/lecturers/sis', async (req, res)=>{
     const { course_id } = req.body
     try{
@@ -196,9 +213,6 @@ apiRouter.post('/all/assessments', (req, res)=>{
     }
 })
 
-
-
-
 apiRouter.post('/initialise/student', (req, res)=>{
     let { student_id } = req.body
     let configQuery = "INSERT INTO status (student_id) VALUES (?)"
@@ -314,6 +328,118 @@ apiRouter.post('/completed/assessments',(req, res)=>{
     }
 })
 
+apiRouter.get('/all/assessments',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct student_id, course_code, man_no) as count FROM assessments"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
+apiRouter.get('/all/completed/assessments',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct student_id, course_code, man_no) as count FROM assessments WHERE status = 'completed'"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
+apiRouter.get('/all/students/started/assessments',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct student_id) as count FROM status"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
+apiRouter.get('/all/students/completed/assessments',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct student_id) as count FROM status WHERE assessments = 'completed'"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
+apiRouter.get('/all/courses/assessed',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct course_code) as count FROM assessments WHERE status = 'completed'"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting courses assessed",error)
+    }
+})
+
+apiRouter.get('/all/lecturers/assessed',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct man_no) as count FROM assessments WHERE status = 'completed'"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting courses assessed",error)
+    }
+})
+
+apiRouter.get('/all/students/completed/config',(req, res)=>{
+    const selectQuery = "SELECT COUNT(distinct student_id) as count FROM status WHERE config = 'completed'"
+    try{
+        dbConnection.query(selectQuery, (err,results)=>{
+            console.log('Results ',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
 apiRouter.post('/total/assessments',(req, res)=>{
     const { student_id } = req.body
     console.log('Received',student_id)
@@ -331,6 +457,5 @@ apiRouter.post('/total/assessments',(req, res)=>{
         console.log("Error getting completed assessments",error)
     }
 })
-
 
 module.exports = apiRouter
