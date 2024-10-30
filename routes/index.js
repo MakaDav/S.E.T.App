@@ -328,6 +328,22 @@ apiRouter.post('/completed/assessments',(req, res)=>{
     }
 })
 
+apiRouter.get('/all/reports',(req, res)=>{
+    const selectQuery = "SELECT COUNT(DISTINCT course_code, man_no) as count FROM assessments WHERE status = 'completed'"
+    try{
+        dbConnection.query(selectQuery,(err,results)=>{
+            console.log('Results all reports',results)
+            if(results.length>0){
+                res.json(results[0])
+            }else{
+                res.json(results)
+            }
+        })
+    }catch(error){
+        console.log("Error getting completed assessments",error)
+    }
+})
+
 apiRouter.get('/all/assessments',(req, res)=>{
     const selectQuery = "SELECT COUNT(distinct student_id, course_code, man_no) as count FROM assessments"
     try{
