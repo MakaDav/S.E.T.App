@@ -23,17 +23,17 @@ function updateState(){
     getAllStudentsStartedAssessments().then(
         startedAssessments => {
             console.log('Started assessments', startedAssessments)
-            state.assessmentsData.studentsAssessmentsStarted = startedAssessments.count
+            state.assessmentsData.studentsAssessmentsStarted = startedAssessments.count.toLocaleString()
             getAllStudentsCompletedAssessments().then(
                 completedAssessments => {
                     console.log('Completed assessments', completedAssessments)
-                    state.assessmentsData.studentsAssessmentsCompleted = completedAssessments.count
+                    state.assessmentsData.studentsAssessmentsCompleted = completedAssessments.count.toLocaleString()
                     getAllCoursesAssessed().then(
                         allCoursesAssessed => {
-                            state.assessmentsData.coursesAssessed = allCoursesAssessed.count+506
+                            state.assessmentsData.coursesAssessed = (allCoursesAssessed.count+506).toLocaleString()
                             getAllLecturersAssessed().then(
                                 allLecturersAssessed => {
-                                    state.assessmentsData.lecturersAssessed = allLecturersAssessed.count+421
+                                    state.assessmentsData.lecturersAssessed = (allLecturersAssessed.count+421).toLocaleString()
                                     refreshStatsDisplay()
                                 }
                             )
