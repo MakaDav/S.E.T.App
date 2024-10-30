@@ -23,11 +23,11 @@ function updateState(){
     getAllStudentsStartedAssessments().then(
         startedAssessments => {
             console.log('Started assessments', startedAssessments)
-            state.assessmentsData.studentsAssessmentsStarted = startedAssessments.count+5499
+            state.assessmentsData.studentsAssessmentsStarted = startedAssessments.count
             getAllStudentsCompletedAssessments().then(
                 completedAssessments => {
                     console.log('Completed assessments', completedAssessments)
-                    state.assessmentsData.studentsAssessmentsCompleted = completedAssessments.count+2606
+                    state.assessmentsData.studentsAssessmentsCompleted = completedAssessments.count
                     getAllCoursesAssessed().then(
                         allCoursesAssessed => {
                             state.assessmentsData.coursesAssessed = allCoursesAssessed.count+506
