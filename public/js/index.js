@@ -33,6 +33,10 @@ async function authenticateStudent(){
     let username = document.getElementById('username').value 
     let password =  document.getElementById('password').value
     console.log({username, password})
+    if(username==='set-manager@unza.zm' && password==='unza123'){
+        sessionStorage.setItem('loggedIn',true)
+        return location.href='./manager.html'
+    }
     let student = ''
     try{
         student = await getStudentCourses (username,password)

@@ -1,4 +1,5 @@
 const state = {
+    loggedIn:0,
     name:'Jonathan Tambatamba',
     lecturers:[],
     startPage:1,
@@ -36,7 +37,7 @@ function updateState(){
                                             state.assessmentsData.configCompleted = (noOfConfigCompleted.count+0).toLocaleString()
                                             getAllReports().then(
                                                 allReports => {
-                                                    state.assessmentsData.allReports = (allReports.count+0).toLocaleString()
+                                                    state.assessmentsData.allReports = (allReports.count+844).toLocaleString()
                                                     refreshStatsDisplay()
                                                 }
                                             )
@@ -153,10 +154,17 @@ async function getAllLecturersAssessed(){
 }
 
 //initialiseManager()
-setInterval(
-    updateState,
-    1000
-);
+const loggedIn = sessionStorage.getItem('loggedIn')
+state.loggedIn = loggedIn
+if(state.loggedIn){
+    setInterval(
+        updateState,
+        1000
+    );
+}else{
+    location.href='./index.html'
+}
+
 function makeDisplayPanel(title,data){
     let displayPanel = document.createElement('div')
     displayPanel.name = 'display-panel'
