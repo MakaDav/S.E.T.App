@@ -116,7 +116,7 @@ async function getAllLecturersAssessed(){
 }
 
 //initialiseManager()
-updateState()
+setInterval(updateState,1000);
 function makeDisplayPanel(title,data){
     let displayPanel = document.createElement('div')
     displayPanel.name = 'display-panel'
