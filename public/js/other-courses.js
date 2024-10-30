@@ -3,8 +3,15 @@ const isExcludedCourse = require("./excluded-courses.js")
 
 let otherCourses = [
     'CSC 4835',
+    'AGS 5004',
+    'DEM 1115',
+    'PAM 9015',
+    'AGG 2944',
+    'SWK 3613',
+    'LPR 4914',
+    'PMT 2015',
+    'PMT 3015',
     'DME 2119',
-    'ECN 1215',
     'EDU 3003',
     'LPR 3964',
     'CSC 3009',
@@ -43,6 +50,10 @@ let otherCourses = [
     'CHE 4715',
     'MEC 5455',
     'MEC 5552',
+    'PHN 2130',
+    'MSE 2003',
+    'SWK 4613',
+    'EDU 2003',
     'AEN 4112',
     'MEC 4702',
     'EEE 4135',
@@ -55,7 +66,6 @@ let otherCourses = [
     'LPR 4155',
     'LPU 2995',
     'LPR 3125',
-    'ECN 1115',
     'PMT 4035',
     'SOC 9815',
     'POL 3025',
@@ -76,10 +86,8 @@ let otherCourses = [
     'IRS 3015',
     'SOC 9255',
     'IRS 3035',
-    'ECN 2115',
     'BBA 9425',
     'HRM 3011',
-    'ECN 2215',
     'PSC 3055',
     'HRM 4035',
     'GMS 1035',
@@ -96,10 +104,8 @@ let otherCourses = [
     'SWK 9315',
     'PHI 3065',
     'PHI 3055',
-    'PAM 9035',
     'SDS 9215'
     ]
-
 function isFirstSemesterCourse(courseCode){
     let excludedCourse = isExcludedCourse(courseCode)
     let c = otherCourses.find(c => {
