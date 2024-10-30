@@ -1,0 +1,43 @@
+.students-assessments, .courses-lecturers-assessments{
+    display:flex;
+    width:80%;
+    margin:auto;
+    justify-content: space-around;
+    text-align: center;
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+.stats-box-item{
+    padding:10px;
+    margin:5px;
+    width:40%;
+    border: 1px solid grey;
+    border-radius:1cap;
+    align-items: center;
+}
+.item-title{
+    padding:3px;
+    border-bottom: 1px solid black;
+    font-weight: bold;
+}
+
+.item-data{
+    padding:10px;
+    color:blue;
+    width:50%;
+    margin:auto;
+    margin-top:5px;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+}
+.stats-banner{
+    width:80%;
+    margin:auto;
+    font-size:large;
+    font-weight: bolder;
+    margin-top:10px;
+}
