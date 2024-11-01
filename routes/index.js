@@ -474,4 +474,15 @@ apiRouter.post('/total/assessments',(req, res)=>{
     }
 })
 
+apiRouter.get('/all/assessments/entries', (req, res) => {
+    const query = 'SELECT * FROM assessments where status = "completed"'
+    dbConnection.query(query, (error, results) => {
+      if (error) {
+        console.error('Error fetching assessments:', error);
+        return res.status(500).json({ error: 'Database query error' });
+      }
+      res.json(results);
+    });
+  });
+
 module.exports = apiRouter

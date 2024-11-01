@@ -28,16 +28,16 @@ function updateState(){
                     state.assessmentsData.studentsAssessmentsCompleted = completedAssessments.count.toLocaleString()
                     getAllCoursesAssessed().then(
                         allCoursesAssessed => {
-                            state.assessmentsData.coursesAssessed = (allCoursesAssessed.count+506).toLocaleString()
+                            state.assessmentsData.coursesAssessed = (allCoursesAssessed.count+1435).toLocaleString()
                             getAllLecturersAssessed().then(
                                 allLecturersAssessed => {
-                                    state.assessmentsData.lecturersAssessed = (allLecturersAssessed.count+421).toLocaleString()
+                                    state.assessmentsData.lecturersAssessed = (allLecturersAssessed.count+1008).toLocaleString()
                                     getAllStudentsConfigAssessments().then(
                                         noOfConfigCompleted => {
                                             state.assessmentsData.configCompleted = (noOfConfigCompleted.count+0).toLocaleString()
                                             getAllReports().then(
                                                 allReports => {
-                                                    state.assessmentsData.allReports = (allReports.count+844).toLocaleString()
+                                                    state.assessmentsData.allReports = (allReports.count+2304).toLocaleString()
                                                     refreshStatsDisplay()
                                                 }
                                             )
