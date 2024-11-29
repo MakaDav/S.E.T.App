@@ -41,3 +41,17 @@
     font-weight: bolder;
     margin-top:10px;
 }
+.lecturer-list-nav-buttons{
+    display:flex;
+    height:50px;
+    justify-content:center;
+    gap:6px;
+}
+.lecturer-list-prev-button,.lecturer-list-next-button{
+    
+    width:40%
+}
+.table-col{
+    width:80%;
+    margin:auto
+}

@@ -3,6 +3,22 @@ import { getStudentCourses, getAssignedCourses } from "./courses/student.js"
 import { getCourseLecturers, getCourseLecturersAssigned, getCourseLecturersAssessedCount}  from "./lecturers/lecturers.js"
 import { completeAssessmentItem, completeAssessments, getAssessmentItemStatus, getCompletedAssessments, getTotalAssessments } from './assessments/assessments.js'
 import questions from "./questionnaire/questionnaire.js"
+import { authenticateLocalUser } from "./local-auth/local-auth.js"
+//import { students } from "../../database/data.js"
+const users = [
+    {
+        username:'set-manager@unza.zm',
+        password:"unza123",
+        name:'Jonathan Tambatamba',
+        role:'manager',
+    },
+    {
+        username:'set-admin@unza.zm',
+        password:"unza123",
+        name:'David Zulu',
+        role:'admin',
+    }
+]
 
 let state = {
     login:0,
@@ -33,10 +49,21 @@ async function authenticateStudent(){
     let username = document.getElementById('username').value 
     let password =  document.getElementById('password').value
     console.log({username, password})
-    if(username==='set-manager@unza.zm' && password==='unza123'){
-        sessionStorage.setItem('loggedIn',true)
-        return location.href='./manager.html'
+    
+    let user = users.find(u=>u.username===username)
+    console.log(user)
+    if(user){
+        if(user.password===password){
+            sessionStorage.setItem('loggedIn',true)
+            if(user.role === 'manager'){
+                return location.href='./manager.html'
+            }else{
+                return location.href='./admin.html'
+            }
+            
+        }
     }
+    
     let student = ''
     try{
         student = await getStudentCourses (username,password)

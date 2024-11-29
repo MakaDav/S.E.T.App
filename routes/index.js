@@ -6,6 +6,16 @@ const bodyParser = require('body-parser')
 const isFirstSemesterCourse = require('../public/js/other-courses')
 apiRouter.use(bodyParser.json())
 
+apiRouter.get('/course/details/:course_code', (req, res)=>{
+    const courseCode = req.params.course_code;
+    let course = data.courses.find(c=>c.code===courseCode)
+    if(course){
+        res.json(course)
+    }else{
+        res.json({message:'Course does not exist'})
+    }
+})
+
 apiRouter.post('/all/courses', (req, res)=>{
     const { username, password } = req.body
     let students = data.students
@@ -17,6 +27,11 @@ apiRouter.post('/all/courses', (req, res)=>{
         console.error('Error fetching lecturers:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
+})
+
+apiRouter.get('/set/users',(req, res)=>{
+    console.log('Local users',data.users)
+    res.json(data.users)
 })
 
 apiRouter.post('/all/courses/sis', async (req, res)=>{
@@ -475,7 +490,7 @@ apiRouter.post('/total/assessments',(req, res)=>{
 })
 
 apiRouter.get('/all/assessments/entries', (req, res) => {
-    const query = 'SELECT * FROM assessments where status = "completed"'
+    const query = `SELECT * FROM assessments where status = "completed" and id >227323`
     dbConnection.query(query, (error, results) => {
       if (error) {
         console.error('Error fetching assessments:', error);
@@ -485,4 +500,46 @@ apiRouter.get('/all/assessments/entries', (req, res) => {
     });
   });
 
+  apiRouter.post('/set/new/answer',(req, res)=>{
+    const {id, newAnswer} = req.body
+    const query = 'UPDATE assessments set answers = ? WHERE id = ?'
+    dbConnection.query(query, [newAnswer,id], (err, results)=>{
+        if(err){
+            console.error('Error fetching assessments:', error);
+            return res.status(500).json({ error: 'Database query error' });
+        }else{
+            res.json(results)
+        }
+    })
+  })
+
+  apiRouter.get('/report/courses/:man_no',(req, res)=>{
+    const manNo = req.params.man_no
+    const query = 'SELECT DISTINCT course_code FROM assessments WHERE man_no=?'
+    try {
+        dbConnection.query(query, [manNo], (err, results)=>{
+            if(err) return res.json({message:""})
+            
+            res.json(results)
+        })
+    } catch (error) {
+        
+    }
+  })
+
+  apiRouter.get('/lecturer/course/assessments/:courseCode/:manNo',(req, res)=>{
+    const {courseCode, manNo} = req.params
+    console.log(courseCode, manNo)
+    try {
+        const selectQuery = 'SELECT answers FROM assessments WHERE course_code = ? AND man_no = ?'
+        dbConnection.query(selectQuery, [ courseCode, manNo ], (error, results)=>{
+            if(error) return res.json({massage:"Failed to fetch"})
+            results = results.map(a=>a.answers)
+            console.log(results)
+            res.json(results)
+        })
+    } catch (error) {
+        console.log('error')
+    }
+  })
 module.exports = apiRouter

@@ -1,9 +1,12 @@
+import lecturers  from "./all-lecturers.js"
+
 const state = {
     loggedIn:0,
     name:'Jonathan Tambatamba',
     lecturers:[],
-    startPage:1,
-    listSize:10,
+    lecturersForDisplay:[],
+    startPage:9,
+    listSize:5,
     assessmentsData:{
         statusData:[],
         assessmentsData:[],
@@ -17,7 +20,43 @@ const state = {
     }
 }
 
+function initializeState(){
+    let filteredLecturers = lecturers
+    .filter(l => l.man_no && l.first_name!==null && parseInt(l.man_no)!==0 && l.first_name!=='' && l.last_name!=='')
+    .sort(
+        (a,b)=>{
+            if(a.last_name.trim() < b.last_name.trim()){
+                return -1
+            }else{
+                return 1
+            }
+        }
+    )
+    .sort(
+        (a,b)=>{
+            if(a.first_name.trim() < b.first_name.trim()){
+                return -1
+            }else{
+                return 1
+            }
+        }
+    )
+    state.lecturers = filteredLecturers
+    loadLecturersForDisplay()
+    refreshLecturerList()
+}
+
+function loadLecturersForDisplay(){
+    let j=0;
+    for(let i = (state.startPage-1)*state.listSize;i<state.startPage*state.listSize;i++){
+        console.log('index',i, j)
+        state.lecturersForDisplay[j++] = state.lecturers[i]
+        //console.log('index',i, state.lecturersForDisplay[i])
+    }
+}
+loadLecturersForDisplay();
 function updateState(){
+    console.log('all lecturers',lecturers)
     getAllStudentsStartedAssessments().then(
         startedAssessments => {
             console.log('Started assessments', startedAssessments)
@@ -137,7 +176,6 @@ async function getAllReports(){
     }
 }
 
-
 async function getAllLecturersAssessed(){
     try{
         let noOfLecturersAssessed = await fetch('/api/all/lecturers/assessed',{
@@ -153,17 +191,20 @@ async function getAllLecturersAssessed(){
     }
 }
 
-//initialiseManager()
+initializeState()
 const loggedIn = sessionStorage.getItem('loggedIn')
 state.loggedIn = loggedIn
-if(state.loggedIn){
+/*if(state.loggedIn){
     setInterval(
         updateState,
         1000
     );
 }else{
     location.href='./index.html'
-}
+}*/
+
+//document.getElementById('set-lecturers-list').innerHTML = makeLecturesList()
+
 
 function makeDisplayPanel(title,data){
     let displayPanel = document.createElement('div')
@@ -180,3 +221,121 @@ function makeDisplayPanel(title,data){
     displayPanel.append(titleLabel,dataLabel)
     return displayPanel
 }
+
+function displayLecturersCourses(e) {
+    // Your code here
+    console.log(e.target)
+}
+
+function makeLecturesList(){
+    let list = ''
+    let displayList = state.lecturersForDisplay
+    console.log(displayList)
+    for(let i = 0;i< displayList.length;i++){
+        const lecturer = displayList[i]
+        let firstName = lecturer.first_name.trim()
+        firstName = firstName.slice(0,1).toUpperCase()+firstName.slice(1).toLowerCase()
+        let lastName = lecturer.last_name.trim()
+        lastName = lastName.slice(0,1).toUpperCase()+lastName.slice(1).toLowerCase()
+
+        list+='<tr name="lecturer-details-field" id="'+lecturer.man_no+'">'+
+                 '<td>'+firstName+'</td>'+
+                 '<td>'+lastName+'</td>'+
+                 '<td id="no-of-courses-'+lecturer.man_no+'">'+2+'</td>'+
+                 '<td>'+2+'</td><td><input type="button" value="View Reports" /></td></tr>'
+    }
+    return list
+}
+
+document.getElementById('lecturer-list-next-button').addEventListener('click',
+    function(){
+        state.startPage = state.startPage+1
+        refreshLecturerList()
+    }
+)
+
+document.getElementById('lecturer-list-prev-button').addEventListener('click',
+    function(){
+        if(state.startPage>1)state.startPage = state.startPage-1
+        refreshLecturerList()
+    }
+)
+
+
+
+function refreshLecturerList(){
+    loadLecturersForDisplay()
+    document.getElementById('set-lecturers-list').innerHTML = makeLecturesList()
+    document.getElementsByName('lecturer-details-field').forEach(
+        le=>{
+            le.style.cursor = 'grab'
+            //le.children[2].innerHTML = Math.floor(Math.random()*5+1)
+            getLecturersCourses(le.id).then(
+                courses=> {
+                    console.log(courses)
+                    le.children[2].innerHTML = courses.length
+                }
+            )
+            
+            console.log(le.children[2])
+            le.addEventListener('click',
+                function(e){
+                    getLecturersCourses(le.id).then(
+                        courses=> {
+                            console.log("Testing",le.id,courses)
+                            const exportData = {
+                                lecturer:state.lecturers.find(l=>l.man_no === le.id),
+                                courses:courses
+                            }
+                            console.log(exportData)
+                            sessionStorage.setItem('reportDetails', JSON.stringify(exportData))
+                            location.href = './lecturer-summary-report.html'
+                        }
+                    )
+                }
+            )
+            le.addEventListener('mouseover', () => {
+                le.style.border = '1px solid grey';
+                le.style.borderRadius = '5%';
+            });
+    
+            le.addEventListener('mouseout', () => {
+                le.style.border = '';
+            });
+        }
+    )
+}
+
+async function getLecturersCourses(manNo){
+    try {
+        let response = await fetch('/api/report/courses/'+manNo,{
+            method:'GET',
+            headers:{
+                'Content-Type':'application/json'
+            },
+        })
+
+        if(response.ok){
+            let courses = await response.json()
+            return courses
+        }
+
+    } catch (error) {
+        
+    }
+}
+
+function search(term, lecturers) {
+    term = term.toLowerCase();
+    return lecturers.filter(u => u.first_name.toLowerCase().startsWith(term) || u.last_name.toLowerCase().startsWith(term));
+}
+
+document.getElementById('lecturer-search-field').addEventListener('input',
+    function(e){
+        //console.log(e.target.value)
+        let list = search(e.target.value,state.lecturers)
+        console.log(list)
+        state.lecturersForDisplay = list
+        refreshLecturerList()
+    }
+)

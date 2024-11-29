@@ -4,6 +4,9 @@
     margin:auto;
     gap:5px;
 }
+.list-title{
+    background-color: grey;
+}
 #student-info{
     flex:1
 }
