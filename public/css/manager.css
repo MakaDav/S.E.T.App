@@ -55,3 +55,9 @@
     width:80%;
     margin:auto
 }
+#lecturers-list{
+    text-align: center;
+    font-size: larger;
+    text-transform: uppercase;
+    font-weight:bold;
+}
