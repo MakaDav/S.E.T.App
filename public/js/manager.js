@@ -51,7 +51,6 @@ function loadLecturersForDisplay(){
     for(let i = (state.startPage-1)*state.listSize;i<state.startPage*state.listSize;i++){
         console.log('index',i, j)
         state.lecturersForDisplay[j++] = state.lecturers[i]
-        //console.log('index',i, state.lecturersForDisplay[i])
     }
 }
 loadLecturersForDisplay();
