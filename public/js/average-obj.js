@@ -243,7 +243,7 @@ let data =[
 
 export default function getAverageObj(listOfObjs){ 
     // Initialize an object to store the sum of each key
-    console.log('Data',data[0], "Size",listOfObjs.length)
+    //console.log('Data',data[0], "Size",listOfObjs.length)
     const sums = {};
     const averages = {};
     
@@ -251,7 +251,7 @@ export default function getAverageObj(listOfObjs){
     listOfObjs.forEach(obj => {
         // Loop through each key in the object
         obj = JSON.parse(obj)
-        console.log('Obj',obj, Object.keys(obj))
+        //console.log('Obj',obj, Object.keys(obj))
         for (let key in obj) {
             
             // Add the value (converted to a number) to the sum for that key
@@ -259,7 +259,7 @@ export default function getAverageObj(listOfObjs){
         }
     });
     
-    console.log("Sums",sums)
+    //console.log("Sums",sums)
     // Calculate the average for each key
     for (let key in sums) {
         averages[key] = sums[key] / listOfObjs.length;

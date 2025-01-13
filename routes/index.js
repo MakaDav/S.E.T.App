@@ -542,4 +542,20 @@ apiRouter.get('/all/assessments/entries', (req, res) => {
         console.log('error')
     }
   })
+
+  apiRouter.get('/all/lecturer/assessments/:manNo',(req, res)=>{
+    const {manNo} = req.params
+    console.log(manNo)
+    try {
+        const selectQuery = 'SELECT answers FROM assessments WHERE man_no = ?'
+        dbConnection.query(selectQuery, [ manNo ], (error, results)=>{
+            if(error) return res.json({massage:"Failed to fetch"})
+            results = results.map(a=>a.answers)
+            console.log(results)
+            res.json(results)
+        })
+    } catch (error) {
+        console.log('error')
+    }
+  })
 module.exports = apiRouter
